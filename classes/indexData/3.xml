@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://mail.gitam.edu/webmail/src/login.php</url><domain>mail.gitam.edu</domain><path>/webmail/src</path><links count="0"/><out count="0"/><title>Gitam University Webmail - Login</title><words count="7"><word count="2">gitam</word><word count="2">university</word><word count="2">webmail</word><word count="1">-</word><word count="2">login</word><word count="1">name</word><word count="1">password</word></words></crawler>

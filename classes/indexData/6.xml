@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://www.gitam.edu/GITAMMap.aspx</url><domain>www.gitam.edu</domain><path/><links count="0"/><out count="1"/><title>&#13;
+	GITAM University&#13;
+</title><words count="6"><word count="2">gitam</word><word count="2">university</word><word count="1">route</word><word count="2">map</word><word count="1">view</word><word count="1">larger</word></words></crawler>

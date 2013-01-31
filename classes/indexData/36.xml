@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://doeresults.gitam.edu/gitamhallticket/Default.aspx</url><domain>doeresults.gitam.edu</domain><path>/gitamhallticket</path><links count="0"/><out count="0"/><title>&#13;
+	GITAM University&#13;
+</title><words count="8"><word count="1">gitam</word><word count="1">university</word><word count="1">online</word><word count="1">hall</word><word count="1">ticket</word><word count="1">registration</word><word count="1">no.</word><word count="1">regularsupplementary</word></words></crawler>

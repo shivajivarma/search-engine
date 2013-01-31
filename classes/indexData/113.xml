@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://xlearn.gitam.edu/moodle/help.php?module=moodle</url><domain>xlearn.gitam.edu</domain><path>/moodle</path><links count="0"/><out count="1"/><title>Help</title><words count="9"><word count="2">help</word><word count="1">no</word><word count="1">text</word><word count="1">to</word><word count="1">display</word><word count="1">index</word><word count="1">of</word><word count="1">all</word><word count="1">files</word></words></crawler>

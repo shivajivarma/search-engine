@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<categories>
+
+<category tag="home">
+	<name>home</name>
+</category>
+
+<category tag="about">
+	<name>about</name>
+</category>
+
+
+<category parent="home" tag="result">
+	<name>result</name>
+	<name>results</name>
+</category>
+
+<category parent="home" tag="library">
+	<name>library</name>
+</category>
+
+<category parent="home" tag="contact">
+	<name>contact</name>
+	<name>important phone</name>
+</category>
+
+
+<category parent="home" tag="cse">
+	<name>cse</name>
+	<name>computer science</name>
+	<name>computer science engineering</name>
+	<name>computer science and engineering</name>
+</category>
+
+
+<category parent="home" tag="ece">
+	<name>ece</name>
+	<name>electrical communication engineering</name>
+	<name>electrical communication and engineering</name>
+</category>
+
+<category parent="home" tag="it">
+	<name>dept it</name>
+	<name>it dept</name>
+	<name>it deparment</name>
+	<name>deparment it</name>
+	<name>information technology</name>
+</category>
+
+<category parent="home" tag="civil">
+	<name>civil</name>
+	<name>civil engineering</name>
+</category>
+
+<category parent="home" tag="eie">
+	<name>eie</name>
+	<name>electronics and instrumentation engineering</name>
+</category>
+
+
+
+
+
+
+</categories>

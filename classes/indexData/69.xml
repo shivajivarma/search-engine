@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://webadmissions.gitam.edu:81/gimplacementportal/Pages/login_placementportal.aspx</url><domain>webadmissions.gitam.edu</domain><path>/gimplacementportal/Pages</path><links count="0"/><out count="0"/><title>&#13;
+	GITAM PLACEMENT PORTAL&#13;
+</title><words count="10"><word count="2">gitam</word><word count="1">placement</word><word count="1">portal</word><word count="1">login</word><word count="1">user</word><word count="1">id</word><word count="1">password</word><word count="1">developed</word><word count="1">by</word><word count="1">university</word></words></crawler>

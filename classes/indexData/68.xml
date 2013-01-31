@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://web.gitam.edu/asset_request/pages/LoginPage.aspx</url><domain>web.gitam.edu</domain><path>/asset_request/pages</path><links count="0"/><out count="0"/><title>&#13;
+	Employee Login&#13;
+</title><words count="10"><word count="1">employee</word><word count="2">login</word><word count="1">user</word><word count="1">id</word><word count="1">password</word><word count="1">developed</word><word count="1">by</word><word count="1">cats</word><word count="1">gitam</word><word count="1">university</word></words></crawler>

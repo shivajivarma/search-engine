@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<crawler><fetch>true</fetch><url>http://web.gitam.edu/attendance/pages/Default.aspx</url><domain>web.gitam.edu</domain><path>/attendance/pages</path><links count="0"/><out count="0"/><title>&#13;
+	Attendance Portal&#13;
+</title><words count="7"><word count="1">attendance</word><word count="1">portal</word><word count="1">developed</word><word count="1">by</word><word count="1">cats</word><word count="1">gitam</word><word count="1">university</word></words></crawler>

@@ -1,7 +1,10 @@
 <?php
-//define constants here
+define('PROXY',true);
+define('PROXY_IP','192.168.23.31');
+define('PROXY_PORT','3128');
 define('DB_SERVER','localhost');
 define('DB_USER','root');
-define('DB_PASSWORD','project');
-define('DB_NAME','mysql');
+define('DB_PASSWORD','varma');
+define('DB_NAME','test');
+define('MY_IP','172.18.4.169');
 ?>
