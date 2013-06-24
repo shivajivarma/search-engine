@@ -11,7 +11,7 @@
 		  {
 		  die('die-error: Could not connect to database: ' . mysql_error());
 		  }
-		 mysql_select_db("test", $this->conn);
+		 mysql_select_db(DB_NAME, $this->conn);
   	}
   	
   	
