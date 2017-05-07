@@ -1,5 +1,8 @@
 <?php
- class funcs{
+
+
+
+class funcs{
  	function __construct(){
  		require_once 'constants.php';
  		
@@ -32,7 +35,7 @@
  	}
  	
  	function fetch($url){
-  		$var = file_get_contents("$url",0, $ctx) or false;
+  		$var = file_get_contents("$url",0, stream_context_create()) or false;
  		return $var;
  	}
  	

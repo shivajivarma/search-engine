@@ -2,7 +2,6 @@
 	header('Content-type: text/xml');
 	$xml = new SimpleXMLElement("<?xml version='1.0' encoding='utf-8'?"."><crawler/>");
 
-
 	if(isset($_GET['url']))
 	{
 		$crawler = new crawler();
@@ -13,8 +12,8 @@
 			$domain = parse_url("http://".preg_replace('/^http[s]?:(\/)(\/)/', "",$_GET['url']));
 			$xml->domain = $domain['host'];
 			
-			$xml->path = preg_replace('/(\/)[a-zA-z0-9\.]+$/', "",preg_replace('/(\/)$/', "",$domain['path']));
-			$xml->path = preg_replace('/(\/([a-z0-9])+)(\/\.\.)$/i',"", $xml->path);
+			//$xml->path = preg_replace('/(\/)[a-zA-z0-9\.]+$/', "",preg_replace('/(\/)$/', "",$domain['path']));
+			//$xml->path = preg_replace('/(\/([a-z0-9])+)(\/\.\.)$/i',"", $xml->path);
 			$crawler->fetchLinks($xml); 		//Fetchs all the links.
 			$xml->links->addAttribute('count',count($xml->links[0]));
 			$xml->out->addAttribute('count',count($xml->out[0]));
@@ -138,7 +137,7 @@
 		
 		function splitIt($file){ //Spilts the words in the page
 		
-			$stopWords = unserialize(file_get_contents("../data/datastop words.dat"));
+			$stopWords = unserialize(file_get_contents("../data/stopWords.dat"));
 			$file = str_replace($stopWords," ",$file);
 			
 			$file = preg_replace('/(\s+)\/\*([^\/]*)\*\/(\s+)/s', " ", $file);

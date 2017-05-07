@@ -26,7 +26,8 @@
 					$this->mysql->dropCrawler();
 					$this->mysql->createCrawler();
 					$url = $_SESSION['url'];
-					mysql_query("INSERT INTO `test`.`crawler` (url,visit,ftch,print) VALUES ('$url',0,0,0)");
+
+           			 mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler` (url,visit,ftch,print) VALUES ('$url',0,0,0)");
 					$this->mysql->crawlerPrint();
 		}
 		
@@ -37,9 +38,14 @@
 			echo "Fetching: ".$_SESSION['fetchURL']."<br>";
 			
 			$xml = $this->sxe("http://".MY_IP."/api/crawler.api.php?url=".$_SESSION['fetchURL']);
-			if((string) $xml->fetch == 'failed') die("die-error: Unable to fetch content: $url<br>");
-			$id = $_SESSION['fetchUrlID'];	
-			mysql_query("UPDATE crawler SET ftch=1 WHERE id='$id'");
+
+			if((string) $xml->fetch == 'failed') die("die-error: Unable to fetch content:<br>");
+			$id = $_SESSION['fetchUrlID'];
+
+
+            echo "Fetching ID: ".$id."<br>";
+
+			mysqli_query($this->mysql->conn,"UPDATE crawler SET ftch=1 WHERE id='$id'");
 			$xml->asXML("indexData/".$id.".xml");
 		}
 		
@@ -47,28 +53,39 @@
 		function sxe($url)
 		{   
 		    $xml = $this->funcs->fetch($url);
-		    foreach ($http_response_header as $header)
-		    {   
-		        if (preg_match('#^Content-Type: text/xml; charset=(.*)#i', $header, $m))
-		        {   
-		            switch (strtolower($m[1]))
-		            {   
-		                case 'utf-8':
-		                    // do nothing
-		                    break;
-		
-		                case 'iso-8859-1':
-		                    $xml = utf8_encode($xml);
-		                    break;
 
-		                default:
-		                    $xml = iconv($m[1], 'utf-8', $xml);
-		            }
-		            break;
-		        }
-		    }
+           /* if (is_array($http_response_header) || is_object($http_response_header))
+            {
+                foreach ($http_response_header as $header)
+                {
+                    if (preg_match('#^Content-Type: text/xml; charset=(.*)#i', $header, $m))
+                    {
+                        switch (strtolower($m[1]))
+                        {
+                            case 'utf-8':
+                                // do nothing
+                                break;
 
-		    return simplexml_load_string($xml);
+                            case 'iso-8859-1':
+                                $xml = utf8_encode($xml);
+                                break;
+
+                            default:
+                                $xml = iconv($m[1], 'utf-8', $xml);
+                        }
+                        break;
+                    }
+                }
+            }*/
+
+
+
+		    $temp = simplexml_load_string($xml);
+
+
+            //print_r($temp);
+
+		    return $temp;
 		}
 		
 		
@@ -92,24 +109,24 @@
 	
 			$r="SELECT * FROM crawler WHERE url='$url'";
 		
-			$result = mysql_query($r);
-			$row = mysql_fetch_array($result);
+			$result = mysqli_query($this->mysql->conn,$r);
+			$row = mysqli_fetch_array($result);
 			$child_id = $row['id'];
 
 				
 				if(!$row['url'])
 				{		
-						mysql_query("INSERT INTO `test`.`crawler` (url,visit,print,ftch) VALUES ('$url',0,0,0)");		
-						$result = mysql_query("SELECT COUNT(*) as c FROM crawler");
-						$row = mysql_fetch_array($result);
+						mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler` (url,visit,print,ftch) VALUES ('$url',0,0,0)");		
+						$result = mysqli_query($this->mysql->conn,"SELECT COUNT(*) as c FROM crawler");
+						$row = mysqli_fetch_array($result);
 						$child_id = $row['c'];
-						mysql_query("INSERT INTO `test`.`crawler_tree` (parent_id,child_id) VALUES ($parent_id,$child_id)");
+						mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler_tree` (parent_id,child_id) VALUES ($parent_id,$child_id)");
 
 						
 						$count++;
 				}
 				else{
-						mysql_query("INSERT INTO `test`.`crawler_tree` (parent_id,child_id) VALUES ('$parent_id','$child_id')");
+						mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler_tree` (parent_id,child_id) VALUES ('$parent_id','$child_id')");
 				}	
 
 		}

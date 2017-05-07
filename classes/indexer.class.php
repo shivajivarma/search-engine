@@ -14,13 +14,13 @@
 		
 				
 				
-				$result = mysql_query("select count(*) as c from `test`.`crawler_tree`");
-				$row = mysql_fetch_array($result);
+				$result = mysqli_query($mysql->conn,"select count(*) as c from `test`.`crawler_tree`");
+				$row = mysqli_fetch_array($result);
 				$no_of_links = $row['c'];
 				//echo $no_of_links;
 				
-				$result = mysql_query("select id,url from `test`.`crawler` where ftch=1");
-				if($row = mysql_fetch_array($result))
+				$result = mysqli_query($mysql->conn,"select id,url from `test`.`crawler` where ftch=1");
+				if($row = mysqli_fetch_array($result))
 				{
 				 $id = $row['id'];
 				 $url = $row['url'];
@@ -29,7 +29,7 @@
    				 $title = preg_replace('/^( )*$/',"No title",$xml->title);
    				 $linksCount = (int) $xml->out->attributes() + (int) $xml->links->attributes();
    				  
-   				 $output = mysql_fetch_array(mysql_query("select count(*) as count from test.crawler_tree where child_id=$id"));
+   				 $output = mysqli_fetch_array(mysqli_query($mysql->conn,"select count(*) as count from test.crawler_tree where child_id=$id"));
    				 $inLinks = $output['count'];
    				
    				 
@@ -58,7 +58,7 @@
    				 
 						
 
-   						mysql_query("UPDATE crawler SET ftch=0 WHERE id='$id'");
+   						mysqli_query($mysql->conn,"UPDATE crawler SET ftch=0 WHERE id='$id'");
 					
 					
 						$i->indexIt($xml,$_SESSION['domainID'],$_SESSION['linkID']);
@@ -77,9 +77,11 @@ class indexer{
 
 
 	function init(){
-	 
-			$result = mysql_query("select id,url from `test`.`crawler` where ftch=1");
-			if($row = mysql_fetch_array($result))
+
+        	$mysql = new mySQL();
+
+			$result = mysqli_query($mysql->conn,"select id,url from `test`.`crawler` where ftch=1");
+			if($row = mysqli_fetch_array($result))
 			{		
 				$url = $row['url'];	 	 
 			 	 $domains = simplexml_load_file("../data/domains.xml");
@@ -89,6 +91,9 @@ class indexer{
 			 	  	$domain->addAttribute('id',count($domains));
 			 	  	
 			 	  	$_SESSION['domainID'] = (int) count($domains);
+
+			 	  	echo "->>>>>>>>>>".$_SESSION['domainID'];
+
 			 	  	$domains->asXML("../data/domains.xml");
 			 	  	$xml = new SimpleXMLElement("<?xml version='1.0' encoding='utf-8'?"."><domain/>");
 			 	  	$xml->addAttribute('id',$_SESSION['domainID']);
@@ -186,7 +191,7 @@ class indexer{
 	}  
 
 	function splitIt($query){
-			$s = unserialize(file_get_contents("stop words.dat"));
+			$s = unserialize(file_get_contents("stopWords.dat"));
 			$query = str_replace($s," ",$query);
 			$query = preg_replace('/(\s+)\/\*([^\/]*)\*\/(\s+)/s', " ", $query);
 			$arr = array('&nbsp;','&copy;','&amp;','(',')','|',',',':','"','&','Ã','©');

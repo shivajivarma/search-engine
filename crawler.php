@@ -40,7 +40,7 @@
   		 	   							$('#fetch').prepend(data);
   		 	   							$('#preloader').html('<img title="preloader"  src="images/check.png">');
   		 	   							
-  		 	   							if(!crawler()) return false;		  		 	   			 		 		
+  		 	   							if(!crawler()) return false;
   		 	   						});								
   	 					
   	   		 	   			});
@@ -65,7 +65,7 @@
 					}
    		 	  		$('#fetch').prepend(data_1);
 
-   		 	  		if(!crawler()) return; //Recursive function to crawl the website   		 	   	
+   		 	  		if(!crawler()) return; //Recursive function to crawl the website
    		 	   	});
    		 	   	
     			}
