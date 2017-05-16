@@ -56,7 +56,7 @@
 				$('#preloader').html('<img title="preloader" src="images/preloader.gif">');
 
 				
-				$.get("./classes/crawler.class.php",{ function: 'init'},
+				$.get("./classes/crawler.class.php",{ function: 'init', url: document.getElementsByName("url")[0].value},
   	 				function(data_1){
   	 				if(data_1.match('die-error')) {
   	 					$('#fetch').prepend(data_1.replace('die-error: ',''));

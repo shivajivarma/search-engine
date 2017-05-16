@@ -1,137 +1,39 @@
 <?php
-	session_start();
-	if(isset($_GET['function']))
-	{
-		$crawler = new crawler();
-		if($_GET['function'] == 'init') {$crawler->init();}
-		else if($_GET['function'] == 'crawlerFetch') {$crawler->crawlerFetch();}
-		else if($_GET['function'] == 'crawlerProcess') {$crawler->crawlerProcess();}
-		
-	}
+$_SESSION['base'] = '.';
+require('./crawler/CrawlerService.php');
 ?>
+
 <?php
-	class crawler{
-	private $funcs;
-	private $mysql;
-	
-		function __construct(){
-			require_once "funcs.php";
-			require_once "mysql.class.php";
-			$this->funcs = new funcs();
-			$this->mysql = new mySQL();
-		}
-		
-		function init(){
-					echo "Creating database<br>";
-					$this->mysql->dropCrawler();
-					$this->mysql->createCrawler();
-					$url = $_SESSION['url'];
-
-           			 mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler` (url,visit,ftch,print) VALUES ('$url',0,0,0)");
-					$this->mysql->crawlerPrint();
-		}
-		
-		function crawlerFetch()
-		{
-			require_once "constants.php";
-			if(!$this->mysql->selUnfetchedLink()) {$this->mysql->countLinks();die('die-error: Completed');}
-			echo "Fetching: ".$_SESSION['fetchURL']."<br>";
-			
-			$xml = $this->sxe("http://".MY_IP."/api/crawler.api.php?url=".$_SESSION['fetchURL']);
-
-			if((string) $xml->fetch == 'failed') die("die-error: Unable to fetch content:<br>");
-			$id = $_SESSION['fetchUrlID'];
+session_start();
+if (isset($_GET['function'])) {
+    $crawlerService = new CrawlerService();
 
 
-            echo "Fetching ID: ".$id."<br>";
+    if ($_GET['function'] == 'init') {
+        $crawlerService->initializeDatabase();
+        echo "Initialized database for :: " . $_GET['url'] . "<br>";
+        $crawlerService->saveUrlToCrawler($_GET['url']);
+        $crawlerService->displayUnprintedUrls();
+    } else if ($_GET['function'] == 'crawlerFetch') {
+        $link = $crawlerService->getUnvisitedLink();
 
-			mysqli_query($this->mysql->conn,"UPDATE crawler SET ftch=1 WHERE id='$id'");
-			$xml->asXML("indexData/".$id.".xml");
-		}
-		
-		
-		function sxe($url)
-		{   
-		    $xml = $this->funcs->fetch($url);
+        if (!$link) {
+            $crawlerService->countLinks();
+            die('die-error: Completed');
+        }
 
-           /* if (is_array($http_response_header) || is_object($http_response_header))
-            {
-                foreach ($http_response_header as $header)
-                {
-                    if (preg_match('#^Content-Type: text/xml; charset=(.*)#i', $header, $m))
-                    {
-                        switch (strtolower($m[1]))
-                        {
-                            case 'utf-8':
-                                // do nothing
-                                break;
+        echo "Fetching: " . $link['url'] . " -- " . $link['id'] . "<br>";
+        $xml = $crawlerService->crawl($link['url']);
+        if ((string)$xml->fetch == 'failed') {
+            die("die-error: Unable to fetch content:<br>");
+        }
 
-                            case 'iso-8859-1':
-                                $xml = utf8_encode($xml);
-                                break;
+        $crawlerService->markLinkAsFetched($link);
+        $xml->asXML("indexData/" . $link['id'] . ".xml");
+        $_SESSION['link'] = $link;
+    } else if ($_GET['function'] == 'crawlerProcess') {
+        $crawlerService->crawlerProcess($_SESSION['link']);
+    }
 
-                            default:
-                                $xml = iconv($m[1], 'utf-8', $xml);
-                        }
-                        break;
-                    }
-                }
-            }*/
-
-
-
-		    $temp = simplexml_load_string($xml);
-
-
-            //print_r($temp);
-
-		    return $temp;
-		}
-		
-		
-		function crawlerProcess()
-		{
-			$parent_id  = $_SESSION['fetchUrlID'];
-			
-			$xml = simplexml_load_file("indexData/".$parent_id.".xml");
-			$links = $xml->links[0];
-			$count = (int) $links->attributes();
-			$count = $count + (int) $xml->out->attributes();	
-			echo "Total links in the page:".$count."<br>";
-		
-	
-	
-		
-		
-		$count=0;
-		for($i=0; $i< count($links); $i++ ){
-			$url=$links->link[$i];
-	
-			$r="SELECT * FROM crawler WHERE url='$url'";
-		
-			$result = mysqli_query($this->mysql->conn,$r);
-			$row = mysqli_fetch_array($result);
-			$child_id = $row['id'];
-
-				
-				if(!$row['url'])
-				{		
-						mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler` (url,visit,print,ftch) VALUES ('$url',0,0,0)");		
-						$result = mysqli_query($this->mysql->conn,"SELECT COUNT(*) as c FROM crawler");
-						$row = mysqli_fetch_array($result);
-						$child_id = $row['c'];
-						mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler_tree` (parent_id,child_id) VALUES ($parent_id,$child_id)");
-
-						
-						$count++;
-				}
-				else{
-						mysqli_query($this->mysql->conn,"INSERT INTO `test`.`crawler_tree` (parent_id,child_id) VALUES ('$parent_id','$child_id')");
-				}	
-
-		}
-		echo "New links in the page:".$count."<br>";
-		$this->mysql->crawlerPrint();
-		}
-	}		
+}
 ?>
