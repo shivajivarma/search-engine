@@ -6,7 +6,7 @@ Search engine, written in php.
 Project Documentation: http://shivajivarma.com/project/search-engine/
 
 
-###Setup:
+### Setup:
 
 1. Install Prerequisite Software:
    * PHP 5.6.30
