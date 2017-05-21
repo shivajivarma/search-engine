@@ -1,9 +1,6 @@
 <?php
-$_SESSION['base'] = '.';
-require('./crawler/CrawlerService.php');
-?>
+include_once(dirname(__DIR__) . '\classes\crawler\CrawlerService.php');
 
-<?php
 session_start();
 if (isset($_GET['function'])) {
     $crawlerService = new CrawlerService();

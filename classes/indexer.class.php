@@ -138,35 +138,6 @@ class indexer
     }
 
 
-    function clear_text($s)
-    {
-        $do = true;
-        while ($do) {
-            $start = stripos($s, '<script');
-            $stop = stripos($s, '</script>');
-            if ((is_numeric($start)) && (is_numeric($stop))) {
-                $s = substr($s, 0, $start) . substr($s, ($stop + strlen('</script>')));
-            } else {
-                $do = false;
-            }
-        }
-        return trim($s);
-    }
-
-    function splitIt($query)
-    {
-        $s = unserialize(file_get_contents("stopWords.dat"));
-        $query = str_replace($s, " ", $query);
-        $query = preg_replace('/(\s+)\/\*([^\/]*)\*\/(\s+)/s', " ", $query);
-        $arr = array('&nbsp;', '&copy;', '&amp;', '(', ')', '|', ',', ':', '"', '&', 'Ã', '©');
-        $query = str_replace($arr, " ", $query);
-        $query = str_replace(array("\r\n", "\r", "\n", "\t"), ' ', $query);
-        $query = preg_replace("/( )+/", " ", $query);
-        $query = preg_replace("/( )+$/", "", $query);
-        $query = preg_replace("/^( )+/", "", $query);
-        $token = explode(" ", strtolower($query));
-        return $token;
-    }
 
 }
 

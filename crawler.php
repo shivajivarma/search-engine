@@ -76,12 +76,24 @@
 </head>
 
 <body>
-	<div id="header">
-		<span id="title" onclick="location. href='./crawler.php'">Crawler</span>
-		<div id="back-button" onclick="location. href='./'">Back</div>	
-	</div>
-	
-	<div id='crawl-form-div'>
+<div id="header">
+
+    <span id="title" onclick="location. href='../'">Search Engine</span>
+
+    <div id="menu">
+        <table>
+            <tr>
+                <td><a href="crawler.php">Crawler</a></td>
+                <td><a href="indexer.php">Indexer</a></td>
+                <td><a href="classes/proxy.php">Proxy</a></td>
+                <td><a href="data/domains.xml">List of sites</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+<div id='crawl-form-div'>
 		<div id='crawl-form'>
 		 <form method="get">
 			<table><tr>

@@ -1,5 +1,7 @@
 <?php
 
+include_once(dirname(__DIR__) . '\class.database.php');
+
 class CrawlerRepository
 {
 

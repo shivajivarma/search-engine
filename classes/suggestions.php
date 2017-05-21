@@ -1,21 +1,9 @@
 <?php
-require_once 'funcs.php';
-$funcs = new funcs();
 $query = $_GET['query'];
 if ($query == "") {
     echo 'Hello!! Start searching more efficiently.';
     return;
 }
-
-
-/*$var = file_get_contents("http://didyoumean.info/api?q=".urlencode($query));
-
-if($var) {
-    echo "Do you mean: <a href='./?query=$var'><u>$var</u></a> ?";
-    return;
-}
- */
-
 
 $lang = 'en';
 $url = 'http://suggestqueries.google.com/complete/search?output=firefox&client=firefox&hl=' . $lang . '&q=' . urlencode($query);

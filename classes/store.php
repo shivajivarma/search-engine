@@ -3,12 +3,6 @@
 	
 	
 	$s = explode("\n",$s);
-	
-	
-	
-	
-	
-	
 	$fp = fopen("stop char.dat", 'w+') or die("I could not open $filename."); 
 	fwrite($fp, serialize($s)); 
 	fclose($fp); 

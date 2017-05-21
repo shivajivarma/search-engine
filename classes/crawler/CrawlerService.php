@@ -1,11 +1,8 @@
 <?php
 
-$base = $_SESSION['base'];
-
-require_once $base . '/constants.php';
-require_once $base . '/utils/Utils.php';
-require_once $base . '/class.database.php';
-require_once $base . '/crawler/CrawlerRepository.php';
+include_once(dirname(__DIR__) . '\constants.php');
+include_once(dirname(__DIR__) . '\utils\Utils.php');
+include_once(dirname(__DIR__) . '\crawler\CrawlerRepository.php');
 
 class CrawlerService
 {
@@ -43,7 +40,7 @@ class CrawlerService
     }
 
 
-    function crawl($url)
+    static function crawl($url)
     {
 
 
@@ -61,13 +58,13 @@ class CrawlerService
             $xml->path = preg_replace('/(\/([a-z0-9])+)(\/\.\.)$/i', "", $xml->path);
 
 
-            $this->lookForLinks($xml, $file);
+            self::lookForLinks($xml, $file);
 
             $xml->links->addAttribute('count', count($xml->links[0]));
             $xml->out->addAttribute('count', count($xml->out[0]));
             unset($xml->out->link);
 
-            $this->lookForWords($xml, $file);
+            self::lookForWords($xml, $file);
 
             $xml->words->addAttribute('count', count($xml->words[0]));
 
@@ -78,7 +75,7 @@ class CrawlerService
         return $xml;
     }
 
-    function lookForLinks($xml, $file)
+    static function lookForLinks($xml, $file)
     {
         $links = $xml->addChild('links');
         $out = $xml->addChild('out');
@@ -111,7 +108,7 @@ class CrawlerService
     }
 
 
-    function lookForWords($xml, $file)
+    static function lookForWords($xml, $file)
     {
         preg_match("/<title>(.*)<\/title>/siU", $file, $title);
 
@@ -142,7 +139,7 @@ class CrawlerService
     function getUnvisitedLink()
     {
         $link = $this->crawlerRepository->fetchUnvisitedLink();
-        if($link){
+        if ($link) {
             $this->crawlerRepository->updateLinkAsVisited($link['id']);
         }
         return $link;
@@ -186,8 +183,9 @@ class CrawlerService
     }
 
 
-    function countLinks(){
-        $row =  $this->crawlerRepository->countForFetchedLinks();
+    function countLinks()
+    {
+        $row = $this->crawlerRepository->countForFetchedLinks();
         echo "Number of links collected:" . $row['c'] . "<br>";
     }
 
