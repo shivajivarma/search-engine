@@ -5,13 +5,13 @@
 	<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
 	<title>Crawler</title>
 
-	<link rel="stylesheet" href="css/default.css" type="text/css">
-	<link rel="stylesheet" href="css/crawler.css" type="text/css">
+	<link rel="stylesheet" href="assets/css/default.css" type="text/css">
+	<link rel="stylesheet" href="assets/css/crawler.css" type="text/css">
 
 	
-	<script type="text/javascript" src="scripts/jquery.js"></script>
+	<script type="text/javascript" src="assets/scripts/jquery.js"></script>
 	<script type="text/javascript">
-			 
+
 	function crawler(){
 			$('#status').html(' Fetching: ');
 			$('#preloader').html('<img title="preloader" src="images/preloader.gif">');
@@ -19,7 +19,7 @@
 
 						$.get("./classes/crawler.class.php",{ function: 'crawlerFetch' },
   	 						function(data){
-  	 						
+
   	 							if(data.match('die-error: Completed')) {
   	 								$('#fetch').prepend(data.replace('die-error: ',''));
   	 								$('#status').html(' Crawling completed: ');
@@ -30,32 +30,32 @@
   	 								$('#fetch').prepend(data.replace('die-error: ',''));
   	 								if(!crawler()) return false;
   	 							}
-  	 							
+
   	 								$('#fetch').prepend(data);
-  	 							
-								
+
+
 									$('#status').html(' Processing: ');
 									$.get("./classes/crawler.class.php",{ function: 'crawlerProcess'},
   	 								function(data){
   		 	   							$('#fetch').prepend(data);
   		 	   							$('#preloader').html('<img title="preloader"  src="images/check.png">');
-  		 	   							
+
   		 	   							if(!crawler()) return false;
-  		 	   						});								
-  	 					
+  		 	   						});
+
   	   		 	   			});
   		 	   		return false;
 	}
-	
-	
-	
+
+
+
 		$(document).ready(function(){
-				
+
 				if(document.getElementsByName("url")[0].value != ""){
 				$('#status').html(' Fetching: ');
 				$('#preloader').html('<img title="preloader" src="images/preloader.gif">');
 
-				
+
 				$.get("./classes/crawler.class.php",{ function: 'init', url: document.getElementsByName("url")[0].value},
   	 				function(data_1){
   	 				if(data_1.match('die-error')) {
@@ -67,9 +67,9 @@
 
    		 	  		if(!crawler()) return; //Recursive function to crawl the website
    		 	   	});
-   		 	   	
+
     			}
-    			
+
 		});
 	</script>
 	

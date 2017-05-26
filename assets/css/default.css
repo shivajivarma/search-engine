@@ -1,0 +1,267 @@
+﻿html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    font-family: "Times New Roman", Times, serif;
+    color: #0066CC;
+}
+
+a:hover {
+    color: red;
+}
+
+iframe {
+    position: relative;
+    width: 99.5%;
+    height: 80%;
+    padding: 0;
+    margin: 0;
+}
+
+#header {
+    height: 50px;
+    padding: 15px 50px 15px 50px;
+
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+#header #title {
+    position: relative;
+    float: left;
+    padding-top: 8px;
+    margin-right: 5px;
+
+    font: 30px "Arial";
+    color: #D84A38;
+
+    cursor: pointer;
+}
+
+#header form {
+    position: relative;
+    float: left;
+    margin-top: 7px;
+}
+
+#header #input, #container #input {
+    width: 450px;
+    padding: 3px;
+    margin-top: 2px;
+    margin-right: 6px;
+
+    font-size: 17px;
+
+    background: #fbfbfb;
+    border: 1px solid #E5E5E5;
+}
+
+#header #menu {
+    position: relative;
+    float: right;
+    border: 1px solid #E5E5E5;
+}
+
+#header #menu a {
+    background-color: white;
+    color: #0066CC;
+    padding: 10px;
+}
+
+#header #menu a:hover {
+    background-color: #EEE;
+    cursor: pointer;
+    color: red;
+}
+
+#suggestions {
+    position: relative;
+    padding: 9px 50px 1px 50px;
+    height: 32px;
+
+    font-size: 18px;
+    color: white;
+    background-color: black;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+#suggestions a {
+    color: gray;
+}
+
+#suggestions a:hover {
+    color: white;
+}
+
+.result-div, .specialResult-div {
+    position: relative;
+    top: 1%;
+
+    width: 100%;
+    border-bottom: 1px solid #E5E5E5;
+
+    font-size: 18px;
+    z-index: 3;
+}
+
+.specialResult-div {
+    background-color: #F9EDBE;
+}
+
+.result, .specialResult {
+    padding: 0.5% 3% 0.5% 3%;
+}
+
+.link {
+    font-size: 15px;
+    color: #009933;
+}
+
+.weight {
+    position: relative;
+    font-size: 15px;
+    float: right;
+    top: -30px;
+    color: silver;
+}
+
+.category {
+    position: relative;
+    font-size: 15px;
+    float: right;
+    top: -30px;
+    background-color: white;
+    color: #E94F44;
+    border: 1px solid #E5E5E5;
+    padding: 2px;
+}
+
+.report {
+    position: relative;
+    font-size: 15px;
+    float: right;
+    top: -30px;
+
+    padding: 2px;
+    margin-right: 10px;
+
+    background-color: #4D90FE;
+    border-radius: 2px 2px 2px 2px;
+    border: 1px solid #3079ED;
+    color: white;
+    cursor: pointer;
+}
+
+#back-button {
+    position: absolute;
+    z-index: 1;
+    top: 4%;
+    left: 25%;
+    padding: 6px;
+
+    background-color: #4D90FE;
+    border-radius: 2px 2px 2px 2px;
+    border: 1px solid #3079ED;
+
+    font-weight: bold;
+
+    color: white;
+    cursor: pointer;
+}
+
+#start-button {
+    padding: 6px;
+
+    background-color: #4D90FE;
+    border-radius: 2px 2px 2px 2px;
+    border: 1px solid #3079ED;
+
+    font-weight: bold;
+
+    color: white;
+    cursor: pointer;
+}
+
+#skip-button {
+    position: absolute;
+    z-index: 1;
+    top: 4%;
+    left: 90%;
+    padding: 6px;
+
+    background-color: #4D90FE;
+    border-radius: 2px 2px 2px 2px;
+    border: 1px solid #3079ED;
+
+    font-weight: bold;
+
+    color: white;
+    cursor: pointer;
+}
+
+#container {
+    position: relative;
+    min-height: 79%;
+}
+
+#footer {
+    position: relative;
+    bottom: 0;
+    height: 24px; /* Height of the footer */
+    width: 100%;
+    text-align: right;
+    background-color: #F5F5F5;
+    border-top: 1px solid #C3C3C3;
+}
+
+#copyright {
+    margin: 6px;
+
+    font-size: 80%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #666666;
+
+}
+
+#copyright:hover {
+    color: #E34B39;
+    cursor: default;
+}
+
+.submit {
+    padding: 6px;
+
+    background-color: #4D90FE;
+    border-radius: 2px 2px 2px 2px;
+    border: 1px solid #3079ED;
+
+    font-weight: bold;
+
+    color: white;
+    cursor: pointer;
+}
+
+.submit:hover, #start-button:hover, #back-button:hover, .report:hover, #skip-button:hover {
+    background-color: #357ae8;
+    border: 1px solid #2f5bb7;
+}
+
+#question {
+    padding: 3px;
+    margin-top: 2px;
+    margin-right: 6px;
+
+    font-size: 17px;
+
+    background: #fbfbfb;
+    border: 1px solid #E5E5E5;
+}
+
+
+

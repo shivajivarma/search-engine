@@ -1,6 +1,5 @@
 <?php
-	require_once 'funcs.php';
-		$funcs = new funcs();
+
  
 	if( isset($_GET['proxy']) && isset($_GET['proxy_ip']) && isset($_GET['proxy_port'])){	
 		$source='constants.php';
@@ -36,14 +35,14 @@
 	 	echo "<b>Submitted</b>";
 	}
 	
- require_once 'constants.php'; 
+ require_once 'constants.php';
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 <head>
 	<title>Proxy settings</title>
-	<link rel="stylesheet" href="../css/default.css" type="text/css">
+	<link rel="stylesheet" href="../assets/css/default.css" type="text/css">
 </head>
 <body>
 <div id="back-button" onclick="location. href='../'">Back</div>	

@@ -5,48 +5,11 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <title>Indexer</title>
 
-    <link rel="stylesheet" href="css/default.css" type="text/css">
-    <link rel="stylesheet" href="css/crawler.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/default.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/crawler.css" type="text/css">
 
 
-    <script type="text/javascript" src="scripts/jquery.js"></script>
-    <script type="text/javascript">
 
-
-        function indexIt() {
-
-            $.get("./classes/indexer.class.php", {function: 'indexIt'},
-                function (data_1) {
-                    if (data_1.match('die-error')) {
-                        $('#fetch').prepend(data_1.replace('die-error: ', ''));
-                        $('#preloader').html('<img title="preloader"  src="images/check.png">');
-                        return false;
-                    }
-                    $('#fetch').prepend(data_1);
-
-                    if (!indexIt()) return false; //Recursive function to crawl the website
-                });
-
-        }
-
-
-        $(document).ready(function () {
-
-            $('#start-button').click(function () {
-
-                $('#status').html(' Indexing: ');
-                $('#preloader').html('<img title="preloader" src="images/preloader.gif">');
-
-                $.get("./classes/indexer.class.php", {function: 'init'},
-                    function (data) {
-                        if (!indexIt()) return;
-
-                    });
-
-            });
-
-        });
-    </script>
 
 </head>
 
@@ -70,7 +33,7 @@
 
 <div id='crawl-form-div'>
     <div id='crawl-form'>
-        <form method="get">
+        <div>
             <table>
                 <tr>
                     <button id="start-button">Start Indexing</button>
@@ -80,7 +43,7 @@
                     <td id="preloader"></td>
                 </tr>
             </table>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -95,6 +58,47 @@
 
 
 </div>
+
+
+
+<script type="text/javascript" src="assets/scripts/jquery.js"></script>
+<script type="text/javascript">
+
+
+    function indexIt() {
+
+        $.get("./classes/indexer.class.php", {function: 'indexIt'},
+            function (data_1) {
+                if (data_1.match('die-error')) {
+                    $('#fetch').prepend(data_1.replace('die-error: ', ''));
+                    $('#preloader').html('<img title="preloader"  src="images/check.png">');
+                    return false;
+                }
+                $('#fetch').prepend(data_1);
+
+                if (!indexIt()) return false; //Recursive function to crawl the website
+            });
+
+    }
+
+
+    $(document).ready(function () {
+
+        $('#start-button').click(function () {
+
+            $('#status').html(' Indexing: ');
+            $('#preloader').html('<img title="preloader" src="images/preloader.gif">');
+
+            $.get("./classes/indexer.class.php", {function: 'init'},
+                function (data) {
+                    if (!indexIt()) return;
+
+                });
+
+        });
+
+    });
+</script>
 
 </body>
 

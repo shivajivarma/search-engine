@@ -20,13 +20,14 @@ if (isset($_GET['function'])) {
 
     if ($_GET['function'] == 'indexIt') {
 
+        $conn = Database::getInstance()->getConnection();
 
-        $result = mysqli_query($mysql->conn, "select count(*) as c from `test`.`crawler_tree`");
+        $result = mysqli_query($conn, "select count(*) as c from `crawler_tree`");
         $row = mysqli_fetch_array($result);
         $no_of_links = $row['c'];
         //echo $no_of_links;
 
-        $result = mysqli_query($mysql->conn, "select id,url from `test`.`crawler` where ftch=1");
+        $result = mysqli_query($conn, "select id,url from `crawler` where ftch=1");
         if ($row = mysqli_fetch_array($result)) {
             $id = $row['id'];
             $url = $row['url'];
@@ -35,7 +36,7 @@ if (isset($_GET['function'])) {
             $title = preg_replace('/^( )*$/', "No title", $xml->title);
             $linksCount = (int)$xml->out->attributes() + (int)$xml->links->attributes();
 
-            $output = mysqli_fetch_array(mysqli_query($mysql->conn, "select count(*) as count from test.crawler_tree where child_id=$id"));
+            $output = mysqli_fetch_array(mysqli_query($conn, "select count(*) as count from crawler_tree where child_id=$id"));
             $inLinks = $output['count'];
 
 
@@ -61,7 +62,7 @@ if (isset($_GET['function'])) {
             $outXML->asXML("../data/links/" . $_SESSION['domainID'] . ".xml");
 
 
-            mysqli_query($mysql->conn, "UPDATE crawler SET ftch=0 WHERE id='$id'");
+            mysqli_query($conn, "UPDATE crawler SET ftch=0 WHERE id='$id'");
 
 
             $i->indexIt($xml, $_SESSION['domainID'], $_SESSION['linkID']);

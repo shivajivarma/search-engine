@@ -44,9 +44,9 @@ if (isset($_GET['urlID']) && isset($_GET['domainID']) && isset($_GET['redirect']
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <title>Project</title>
 
-    <link rel="stylesheet" href="./css/default.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/default.css" type="text/css">
 
-    <script type="text/javascript" src="./scripts/jquery.js"></script>
+    <script type="text/javascript" src="assets/scripts/jquery.js"></script>
 
 </head>
 

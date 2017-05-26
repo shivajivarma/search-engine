@@ -23,6 +23,9 @@ if (isset($_GET['query']) && $_GET['query'] != '') {
         if ($specialID == 0)
             foreach ($domainsXML->XPath("/domains/domain") as $domain) {
                 $att = "name";
+
+               // echo "==========================".strtolower($keyword) . " ---- ". $domain[0]->attributes()->$att ."========================== <br>";
+
                 if (strtolower($keyword) == (string)$domain[0]->attributes()->$att) {
                     $specialID = $domain[0]->attributes();
                     break;

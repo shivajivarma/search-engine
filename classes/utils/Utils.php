@@ -2,6 +2,36 @@
 
 class Utils
 {
+    function __construct(){
+        require_once 'constants.php';
+
+        if(PROXY){
+            // Define the default, system-wide context.
+            $r_default_context = stream_context_get_default (
+                array (
+                    'http' => array (
+                        'proxy' => PROXY_IP.":".PROXY_PORT,
+                        'request_fulluri' => True,
+                        'timeout' => 8
+                    ),
+                )
+            );
+            // Though we said system wide, some extensions need a little coaxing.
+            libxml_set_streams_context($r_default_context);
+        }
+        else{
+            // Define the default, system-wide context.
+            $r_default_context = stream_context_get_default (
+                array (
+                    'http' => array (
+                        'timeout' => 8
+                    ),
+                )
+            );
+            // Though we said system wide, some extensions need a little coaxing.
+            libxml_set_streams_context($r_default_context);
+        }
+    }
 
     public static function sxe($xml)
     {

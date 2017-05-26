@@ -6,7 +6,7 @@
     <title>Search Engine</title>
 
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="css/default.css" type="text/css">
+    <link rel="stylesheet" href="assets/css/default.css" type="text/css">
 </head>
 
 <body>
@@ -50,7 +50,7 @@
     <div id='copyright'>Final Year Project 2012 &nbsp;</div>
 </div>
 
-<script type="text/javascript" src="./scripts/jquery.js"></script>
+<script type="text/javascript" src="assets/scripts/jquery.js"></script>
 <script type="text/javascript">
 
 
