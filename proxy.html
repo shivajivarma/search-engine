@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Proxy settings</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <link rel="stylesheet" href="assets/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-light mb-4">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/#">Search Engine</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="crawler.html">Crawler</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="indexer.html">Indexer</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="proxy.html">Proxy Settings <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="data/domains.xml">List of sites</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" value="" id="proxy">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">USE PROXY</span>
+            </label>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group">
+                <label class="form-control-label">PROXY IP :</label>
+                <input type="text" id="proxy-ip" class="form-control">
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="form-group">
+                <label class="form-control-label">PROXY PORT :</label>
+                <input type="text" id="proxy-port" class="form-control">
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button class="btn btn-primary" id="save-settings">Save</button>
+            <img id="loader" class="hide">
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="assets/components/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="assets/components/tether/dist/js/tether.min.js"></script>
+<script type="text/javascript" src="assets/components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    var PROXY_URL = './api/proxy.api.php';
+
+    var $proxy = $('#proxy'),
+        $proxyIP = $('#proxy-ip'),
+        $proxyPort = $('#proxy-port');
+
+    var loader = (function () {
+
+        var $loader = $('#loader');
+
+        return {
+            loading: function () {
+                $loader.attr('src', 'assets/images/preloader.gif');
+                $loader.removeClass('hide');
+            },
+            complete: function () {
+                $loader.attr('src', 'assets/images/check.png');
+                $loader.removeClass('hide');
+            },
+            hide: function () {
+                $loader.addClass('hide');
+            }
+        }
+    })();
+
+    $(document).ready(function () {
+        $.ajax({
+            method: "GET",
+            url: PROXY_URL,
+            data: {'action': 'getSettings'},
+            success: function (data) {
+                $proxy.prop('checked', data.proxy);
+                $proxyIP.val(data.proxyIP);
+                $proxyPort.val(data.proxyPort);
+            }
+        });
+
+
+        $('#save-settings').on('click', function () {
+            var settings = {};
+            settings.action = 'setSettings';
+            settings.proxy = $proxy.prop('checked');
+            settings.proxyIP = $proxyIP.val();
+            settings.proxyPort = $proxyPort.val();
+
+            $.ajax({
+                method: "GET",
+                url: PROXY_URL,
+                data: settings,
+                success: function (data) {
+                    loader.complete();
+                }
+            });
+        })
+
+    });
+</script>
+
+</body>
+</html>

@@ -20,5 +20,12 @@ Project Documentation: http://shivajivarma.com/project/search-engine/
 3. Ensure below extensions as enabled in php.ini
     * php_curl.dll
     * php_mysqli.dll
+    
 
-4. Start the PHP server in project source folder.
+4. Create scheme with name 'search'
+
+5. Start the PHP server in project source folder.
+
+
+Author:  
+[shivaji varma](http://shivajivarma.com)

@@ -1,44 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Search Engine</title>
 
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="stylesheet" href="assets/css/default.css" type="text/css">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <link rel="stylesheet" href="assets/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
-<div id="header">
 
-    <span id="title" onclick="location. href='./'">Search Engine</span>
+<nav class="navbar navbar-toggleable-md navbar-light">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/#">Search Engine</a>
 
-    <form method="get">
-        <table>
-            <tr>
-                <td><input id="input" type="text" value="<?php if (isset($_GET['query'])) echo $_GET['query']; ?>"
-                           name="query"></td>
-                <td><input class="submit" value="Search" type="submit"></td>
-            </tr>
-        </table>
+
+    <form class="form-inline mr-auto">
+        <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" value="<?php if (isset($_GET['query'])) echo $_GET['query']; ?>">
+        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
     </form>
 
-    <div id="menu">
-        <table>
-            <tr>
-                <td><a href="./crawler.php">Crawler</a></td>
-                <td><a href="indexer.php">Indexer</a></td>
-                <td><a href="classes/proxy.php">Proxy</a></td>
-                <td><a href="data/domains.xml">List of sites</a></td>
-            </tr>
-        </table>
+
+    <div class="collapse navbar-collapse float-right" id="indexNavar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="crawler.html">Crawler</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="indexer.html">Indexer</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="proxy.html">Proxy Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="data/domains.xml">List of sites</a>
+            </li>
+        </ul>
     </div>
-</div>
+</nav>
 
 
 <div id='suggestions'>
-    <img title="loader" src="images/preloader.gif" class="loader">
+    <img title="loader" src="assets/images/preloader.gif" class="loader">
     <div class="words">Hello!! Start searching more efficiently.</div>
 </div>
 
@@ -46,9 +59,13 @@
 <div id="container"></div>
 
 
-<div id='footer'>
-    <div id='copyright'>Final Year Project 2012 &nbsp;</div>
-</div>
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted"> ALL WORKS © 2017 <a target="_blank" href="//shivajivarma.com/?rel=author" rel="author">SHIVAJI VARMA</a></span>
+    </div>
+</footer>
+
 
 <script type="text/javascript" src="assets/scripts/jquery.js"></script>
 <script type="text/javascript">

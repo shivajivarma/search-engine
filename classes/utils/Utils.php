@@ -1,36 +1,40 @@
 <?php
 
+include_once(dirname(__DIR__) . '\constants.php');
+
+$r_default_context = null;
+
+if (PROXY) {
+    // Define the default, system-wide context.
+    $r_default_context = stream_context_get_default(
+        array(
+            'http' => array(
+                'proxy' => PROXY_IP . ":" . PROXY_PORT,
+                'request_fulluri' => True,
+                'timeout' => 8
+            ),
+        )
+    );
+    // Though we said system wide, some extensions need a little coaxing.
+    libxml_set_streams_context($r_default_context);
+} else {
+    // Define the default, system-wide context.
+    $r_default_context = stream_context_get_default(
+        array(
+            'http' => array(
+                'timeout' => 1
+            ),
+        )
+    );
+    // Though we said system wide, some extensions need a little coaxing.
+    libxml_set_streams_context($r_default_context);
+}
+
 class Utils
 {
-    function __construct(){
-        require_once 'constants.php';
 
-        if(PROXY){
-            // Define the default, system-wide context.
-            $r_default_context = stream_context_get_default (
-                array (
-                    'http' => array (
-                        'proxy' => PROXY_IP.":".PROXY_PORT,
-                        'request_fulluri' => True,
-                        'timeout' => 8
-                    ),
-                )
-            );
-            // Though we said system wide, some extensions need a little coaxing.
-            libxml_set_streams_context($r_default_context);
-        }
-        else{
-            // Define the default, system-wide context.
-            $r_default_context = stream_context_get_default (
-                array (
-                    'http' => array (
-                        'timeout' => 8
-                    ),
-                )
-            );
-            // Though we said system wide, some extensions need a little coaxing.
-            libxml_set_streams_context($r_default_context);
-        }
+    function __construct()
+    {
     }
 
     public static function sxe($xml)
@@ -62,9 +66,32 @@ class Utils
         return $temp;
     }
 
+    public static function removeFolder($path)
+    {
+        foreach(glob($path . '/*') as $file) {
+            if(is_dir($file))
+                rrmdir($file);
+            else
+                unlink($file);
+        }
+        rmdir($path);
+    }
+
+    public static function createFolder($path)
+    {
+        if (!file_exists($path)) {
+            mkdir($path, 0777, true);
+        }
+    }
+
+    public static function getDomainFromUrl($url)
+    {
+        return parse_url('http://' . str_replace(array('https://', 'http://'), '', $url), PHP_URL_HOST);
+    }
+
     public static function fetch($url)
     {
-        $file = file_get_contents("$url", 0, stream_context_create()) or false;
+        $file = file_get_contents("$url", 0) or false;
         return $file;
     }
 

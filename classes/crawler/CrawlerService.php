@@ -1,17 +1,21 @@
 <?php
 
-include_once(dirname(__DIR__) . '\constants.php');
 include_once(dirname(__DIR__) . '\utils\Utils.php');
 include_once(dirname(__DIR__) . '\crawler\CrawlerRepository.php');
+include_once(dirname(__DIR__) . '\crawler\model\Crawler.php');
+include_once(dirname(__DIR__) . '\domain\DomainService.php');
 
 class CrawlerService
 {
 
-    private $crawlerRepository;
+    private $crawlerRepository, $domainService;
+
+    private static $CRAWLER_DATA_PATH = '../data/crawler/';
 
     function __construct()
     {
         $this->crawlerRepository = new CrawlerRepository();
+        $this->domainService = new DomainService();
     }
 
 
@@ -21,22 +25,41 @@ class CrawlerService
         $this->crawlerRepository->createCrawlerSchema();
     }
 
+    function prepareDomain($url){
+        $domainName = Utils::getDomainFromUrl($url);
+
+
+        $domain = $this->domainService->saveDomain($domainName);
+
+        $path = $this::$CRAWLER_DATA_PATH.$domainName;
+        Utils::removeFolder($path);
+        Utils::createFolder($path);
+
+        return $domain;
+
+    }
+
 
     function saveUrlToCrawler($url)
     {
         $this->crawlerRepository->saveCrawler($url);
     }
 
-    function displayUnprintedUrls()
-    {
-        $result = $this->crawlerRepository->fetchAllCrawlerForPrint(0);
 
-        while ($row = mysqli_fetch_array($result)) {
-            echo $row['id'] . " " . $row['url'];
-            echo "<br>";
-        }
 
-        $this->crawlerRepository->updateAllCrawlerToPrinted();
+
+    function saveCrawledDataToFile($xml, $link, $domainName){
+        $this->crawlerRepository->updateLinkStatus($link->id, 'FETCHED');
+        $xml->asXML($this::$CRAWLER_DATA_PATH . $domainName . '/'.$link->id . ".xml");
+    }
+
+    function getCrawledDataFile($link, $domainName){
+        return simplexml_load_file($this::$CRAWLER_DATA_PATH . $domainName . '/'.$link->id . ".xml");
+    }
+
+
+    function fetchFailed($link){
+        $this->crawlerRepository->updateLinkStatus($link->id, 'FETCH_FAILED');
     }
 
 
@@ -138,55 +161,58 @@ class CrawlerService
 
     function getUnvisitedLink()
     {
-        $link = $this->crawlerRepository->fetchUnvisitedLink();
+        $link = $this->crawlerRepository->fetchOpenLink();
         if ($link) {
-            $this->crawlerRepository->updateLinkAsVisited($link['id']);
+            $this->crawlerRepository->updateLinkStatus($link['id'], 'FETCHING');
+            return new Crawler($link['id'], $link['url'], $link['status']);
         }
-        return $link;
-    }
-
-    function markLinkAsFetched($link)
-    {
-        $this->crawlerRepository->updateLinkAsFetched($link['id']);
+        return null;
     }
 
 
-    function crawlerProcess($link)
+
+    function crawlerProcess($linkId, $domainName)
     {
-        $xml = simplexml_load_file("indexData/" . $link['id'] . ".xml");
+        $xml = simplexml_load_file($this::$CRAWLER_DATA_PATH . $domainName . '/'. $linkId . ".xml");
         $links = $xml->links[0];
-        $count = (int)$links->attributes();
-        $count = $count + (int)$xml->out->attributes();
-        echo "Total links in the page:" . $count . "<br>";
 
 
-        $count = 0;
+        $result = new stdClass();
+        $result->totalLinks = (int)$links->attributes();
+        $result->totalLinks = $result->totalLinks + (int)$xml->out->attributes();
+        $result->links = array();
+
+        $result->totalNewLinks = 0;
         for ($i = 0; $i < count($links); $i++) {
             $url = $links->link[$i];
 
             $row = $this->crawlerRepository->fetchByUrl($url);
 
             if (!$row['url']) {
-                $this->crawlerRepository->saveCrawler($url);
-                $row = $this->crawlerRepository->fetchCount();
-                $child_id = $row['c'];
-                $count++;
+                $newLink = new stdClass();
+                $newLink->id = $this->crawlerRepository->saveCrawler($url);
+                $newLink->url= strval($url);
+
+                array_push($result->links, $newLink);
+
+                $childId = $this->crawlerRepository->fetchCount();
+                $result->totalNewLinks++;
             } else {
-                $child_id = $row['id'];
+                $childId = $row['id'];
             }
 
-            $this->crawlerRepository->saveCrawlerTree($link['id'], $child_id);
+            $this->crawlerRepository->saveCrawlerTree($linkId, $childId);
         }
 
-        echo "New links in the page:" . $count . "<br>";
-        $this->displayUnprintedUrls();
+        $this->crawlerRepository->updateLinkStatus($linkId, 'PROCESSED');
+
+        return $result;
     }
 
 
     function countLinks()
     {
-        $row = $this->crawlerRepository->countForFetchedLinks();
-        echo "Number of links collected:" . $row['c'] . "<br>";
+        return $this->crawlerRepository->countForProcessedLinks();
     }
 
 

@@ -1,13 +1,17 @@
 <?php
-include(dirname(__DIR__) . '\classes\crawler\CrawlerService.php');
 
-header('Content-type: text/xml');
+include_once(dirname(__DIR__) . '\classes\indexer\IndexerController.php');
+include_once(dirname(__DIR__) . '\classes\CustomException.php');
 
-$xml = new SimpleXMLElement("<?xml version='1.0' encoding='utf-8'?" . "><crawler/>");
-if (isset($_GET['url'])) {
-    $xml = CrawlerService::crawl($_GET['url']);
+error_reporting(E_ERROR);
+
+try {
+    if (isset($_GET['action']) && !empty($_GET['action'])) {
+        $controller = new IndexerController();
+        $controller = $controller->{$_GET['action']}();
+    } else {
+       throw new CustomException("Action not specified", 400);
+    }
+} catch (CustomException $e) {
+    $e->handle();
 }
-print($xml->asXML());
-
-
-?>

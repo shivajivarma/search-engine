@@ -16,8 +16,8 @@ class CrawlerRepository
 
     function createCrawlerSchema()
     {
-        mysqli_query($this->mysqli, "CREATE  TABLE `crawler` (`id` INT NOT NULL AUTO_INCREMENT,`url` VARCHAR(500) NOT NULL ,`visit` BINARY NOT NULL ,`ftch` BINARY NOT NULL ,`print` BINARY NOT NULL ,PRIMARY KEY (`id`) ,UNIQUE INDEX `url_UNIQUE` (`url` ASC) )");
-        mysqli_query($this->mysqli, "CREATE  TABLE `crawler_tree` (`id` INT NOT NULL AUTO_INCREMENT,`parent_id` INT NOT NULL ,`child_id` INT NOT NULL ,INDEX `parent` (`parent_id` ASC) , INDEX `child` (`child_id` ASC) ,PRIMARY KEY (`id`) , CONSTRAINT `parent` FOREIGN KEY (`parent_id` ) REFERENCES `test`.`crawler` (`id` ) ON DELETE NO ACTION ON UPDATE NO ACTION, CONSTRAINT `child` FOREIGN KEY (`child_id` ) REFERENCES `test`.`crawler` (`id` ) ON DELETE NO ACTION ON UPDATE NO ACTION);");
+        mysqli_query($this->mysqli, "CREATE  TABLE `crawler` (`id` INT NOT NULL AUTO_INCREMENT,`url` VARCHAR(500) NOT NULL ,`status` VARCHAR(500) , PRIMARY KEY (`id`) ,UNIQUE INDEX `url_UNIQUE` (`url` ASC) )");
+        mysqli_query($this->mysqli, "CREATE  TABLE `crawler_tree` (`id` INT NOT NULL AUTO_INCREMENT,`parent_id` INT NOT NULL ,`child_id` INT NOT NULL ,INDEX `parent` (`parent_id` ASC) , INDEX `child` (`child_id` ASC) ,PRIMARY KEY (`id`) , CONSTRAINT `parent` FOREIGN KEY (`parent_id` ) REFERENCES `crawler` (`id` ) ON DELETE NO ACTION ON UPDATE NO ACTION, CONSTRAINT `child` FOREIGN KEY (`child_id` ) REFERENCES `crawler` (`id` ) ON DELETE NO ACTION ON UPDATE NO ACTION);");
     }
 
 
@@ -29,39 +29,27 @@ class CrawlerRepository
 
     function saveCrawler($url)
     {
-        mysqli_query($this->mysqli, "INSERT INTO `crawler` (url,visit,ftch,print) VALUES ('$url',0,0,0)");
-    }
-
-    function fetchAllCrawlerForPrint($print)
-    {
-        return mysqli_query($this->mysqli, "SELECT * FROM crawler where print=" . $print);
+        $url = urldecode($url);
+        mysqli_query($this->mysqli, "INSERT INTO `crawler` (url, status) VALUES ('$url', 'OPEN')");
+        return mysqli_insert_id($this->mysqli);
     }
 
 
-    function updateAllCrawlerToPrinted()
+    function updateLinkStatus($id, $status)
     {
-        mysqli_query($this->mysqli, "UPDATE crawler SET print=1 WHERE print=0");
+        mysqli_query($this->mysqli, "UPDATE crawler SET status='$status' WHERE id='$id'");
     }
 
-    function fetchUnvisitedLink()
+
+    function fetchOpenLink()
     {
-        $result = mysqli_query($this->mysqli, "SELECT * FROM crawler where visit=0");
+        $result = mysqli_query($this->mysqli, "SELECT * FROM crawler where status='OPEN'");
 
         if ($row = mysqli_fetch_array($result)) {
             return $row;
         } else {
             return false;
         }
-    }
-
-    function updateLinkAsVisited($id)
-    {
-        mysqli_query($this->mysqli, "UPDATE crawler SET visit=1 WHERE id='$id'");
-    }
-
-    function updateLinkAsFetched($id)
-    {
-        mysqli_query($this->mysqli, "UPDATE crawler SET ftch=1 WHERE id='$id'");
     }
 
     function fetchByUrl($url)
@@ -82,7 +70,7 @@ class CrawlerRepository
         $result = mysqli_query($this->mysqli, "SELECT COUNT(*) as c FROM crawler");
 
         if ($row = mysqli_fetch_array($result)) {
-            return $row;
+            return $row['c'];
         } else {
             return false;
         }
@@ -90,12 +78,25 @@ class CrawlerRepository
     }
 
 
-    function saveCrawlerTree($parent_id, $child_id){
+    function saveCrawlerTree($parent_id, $child_id)
+    {
         mysqli_query($this->mysqli, "INSERT INTO `crawler_tree` (parent_id,child_id) VALUES ('$parent_id','$child_id')");
     }
 
-    function countForFetchedLinks(){
-        $result = mysqli_query($this->mysqli, "SELECT COUNT(*) as c FROM crawler where ftch=1");
+    function countForProcessedLinks()
+    {
+        $result = mysqli_query($this->mysqli, "SELECT COUNT(*) as c FROM crawler where status='PROCESSED'");
+
+        if ($row = mysqli_fetch_array($result)) {
+            return $row['c'];
+        } else {
+            return false;
+        }
+    }
+
+    function getProcessedLink()
+    {
+        $result = mysqli_query($this->mysqli, "SELECT * FROM crawler where status='PROCESSED'");
 
         if ($row = mysqli_fetch_array($result)) {
             return $row;
@@ -104,16 +105,26 @@ class CrawlerRepository
         }
     }
 
-    function getFetchedLink(){
-        $result = mysqli_query($this->mysqli, "SELECT * FROM crawler where ftch=1");
+    function countForLinksInCrawlerTree()
+    {
+        $result = mysqli_query($this->mysqli, "select count(*) as c from `crawler_tree`");
 
         if ($row = mysqli_fetch_array($result)) {
-            return $row;
+            return $row['c'];
+        } else {
+            return false;
+        }
+    }
+
+    function countForLinksInCrawlerTreeWhereChild($child_id)
+    {
+        $result = mysqli_query($this->mysqli, "select count(*) as c from `crawler_tree` where child_id='$child_id'");
+
+        if ($row = mysqli_fetch_array($result)) {
+            return $row['c'];
         } else {
             return false;
         }
     }
 
 }
-
-?>

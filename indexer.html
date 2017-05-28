@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Indexer</title>
+
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <link rel="stylesheet" href="assets/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-toggleable-md navbar-light mb-4">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/#">Search Engine</a>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="crawler.html">Crawler</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="indexer.html">Indexer <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="proxy.html">Proxy Settings</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="data/domains.xml">List of sites</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="jumbotron">
+        <h3>Enter url :</h3>
+
+        <form onsubmit="return false">
+            <div class="form-group">
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                    <div class="input-group-addon">http://www.</div>
+                    <input id="domainUrl"
+                           type="text"
+                           class="form-control"
+                           name="url"
+                           title="URL"
+                           value=""
+                           disabled
+                    >
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit" id="indexBtn">Start Indexing</button>
+
+            &nbsp;<img id="loader" class="hide">
+        </form>
+
+        <br/>
+
+        <div class="row">
+            <div class="col-12">
+                <b id="status"></b> <span id="statusMessage"></span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-12" id="console">
+
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="assets/components/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="assets/components/tether/dist/js/tether.min.js"></script>
+<script type="text/javascript" src="assets/components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+
+
+    var INDEXER_URL = './api/indexer.api.php';
+
+    var $status = $('#status'),
+        $statusMessage = $('#statusMessage'),
+        $console = $('#console');
+
+
+    var loader = (function () {
+
+        var $loader = $('#loader');
+
+        return {
+            loading: function () {
+                $loader.attr('src', 'assets/images/preloader.gif');
+                $loader.removeClass('hide');
+            },
+            complete: function () {
+                $loader.attr('src', 'assets/images/check.png');
+                $loader.removeClass('hide');
+            },
+            hide: function () {
+                $loader.addClass('hide');
+            }
+        }
+    })();
+
+
+    function status(code, message, type) {
+
+        switch (type) {
+            case 'fetching':
+                $status.text('Fetching :');
+                break;
+            default:
+                $status.text(code + ' : ');
+        }
+
+
+        switch (type) {
+            case 'danger':
+                $status.addClass('text-danger');
+                break;
+            default:
+                $status.removeClass('text-danger');
+        }
+
+        $statusMessage.text(message);
+    }
+
+    function printToConsole(message) {
+        $console.append('<p>' + message + '</p>');
+        $console.scrollTop($console.prop('scrollHeight'));
+    }
+
+    function indexIt(domain) {
+
+        loader.loading();
+        status('Indexing :', domain.name);
+
+        $.ajax({
+            method: "GET",
+            url: INDEXER_URL,
+            data: {'action': 'indexIt', 'domainName': domain.name, 'domainId': domain.id},
+            success: function (data) {
+
+                if (data.status === 'indexed') {
+                    printToConsole('<b>Indexed :</b> url( ' + data.link.url + ') id(' + data.link.id + ')');
+                    indexIt(domain)
+                } else if (data.status === 'failed') {
+                    printToConsole('<b class="text-danger">Fetch failed for:</b> url( ' + data.link.url + ') id(' + data.link.id + ')');
+                    crawler(domainName)
+                } else if (data.status === 'complete') {
+                    printToConsole('<b class="text-success">Crawling complete:</b> Total links crawled :: ' + data.count);
+                    loader.complete();
+                }
+
+                //  if (!) return false; //Recursive function to crawl the website
+            },
+            error: function (jhr) {
+                status('error', jhr.responseJSON.message, 'danger');
+                loader.hide();
+            }
+        });
+
+    }
+
+    var $domainUrl = $('#domainUrl');
+
+    $(document).ready(function () {
+
+        loader.loading();
+
+        var domain;
+
+        $.ajax({
+            method: "GET",
+            url: INDEXER_URL,
+            data: {'action': 'startIndexingDomain'},
+            success: function (data) {
+                $domainUrl.val(data.domain.name);
+                domain = data.domain;
+                loader.hide();
+            },
+            error: function (jhr) {
+                status('error', jhr.responseJSON.message, 'danger');
+                loader.hide();
+            }
+        });
+
+
+        $('#indexBtn').on('click', function () {
+            indexIt(domain);
+        })
+
+    });
+</script>
+
+</body>
+
+</html>
