@@ -46,11 +46,15 @@ body {
 
 
 #suggestions {
-    padding: 10px 50px;
     font-size: 18px;
     color: white;
     background-color: black;
     border-bottom: 1px solid #E5E5E5;
+}
+
+#suggestions .words, #suggestions img{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #suggestions a {
@@ -62,22 +66,13 @@ body {
 }
 
 .result-div, .specialResult-div {
-    position: relative;
-    top: 1%;
-
-    width: 100%;
     border-bottom: 1px solid #E5E5E5;
-
-    font-size: 18px;
-    z-index: 3;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .specialResult-div {
     background-color: #F9EDBE;
-}
-
-.result, .specialResult {
-    padding: 0.5% 3% 0.5% 3%;
 }
 
 .link {
@@ -86,10 +81,7 @@ body {
 }
 
 .weight {
-    position: relative;
-    font-size: 15px;
     float: right;
-    top: -30px;
     color: silver;
 }
 
@@ -118,4 +110,11 @@ body {
     border: 1px solid #3079ED;
     color: white;
     cursor: pointer;
+}
+
+.no-result{
+    font-size: 45px;
+    text-align: center;
+    margin-top: 13%;
+    height: 100%;
 }

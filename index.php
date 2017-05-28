@@ -26,7 +26,8 @@
 
 
     <form class="form-inline mr-auto">
-        <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" value="<?php if (isset($_GET['query'])) echo $_GET['query']; ?>">
+        <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search"
+               value="<?php if (isset($_GET['query'])) echo $_GET['query']; ?>">
         <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
     </form>
 
@@ -50,19 +51,27 @@
 </nav>
 
 
-<div id='suggestions'>
-    <img title="loader" src="assets/images/preloader.gif" class="loader">
-    <div class="words">Hello!! Start searching more efficiently.</div>
+<div id='suggestions' class="container-fluid">
+    <div class="row">
+        <div class="col-1 loader">
+            <img title="loader" src="assets/images/preloader.gif">
+        </div>
+        <div class="col-11">
+            <div class="words">Hello!! Start searching more efficiently.</div>
+        </div>
+    </div>
 </div>
 
 
-<div id="container"></div>
-
+<div id="container" class="container-fluid"></div>
 
 
 <footer class="footer">
-    <div class="container">
-        <span class="text-muted"> ALL WORKS © 2017 <a target="_blank" href="//shivajivarma.com/?rel=author" rel="author">SHIVAJI VARMA</a></span>
+    <div class="container-fluid">
+        <span class="text-muted"> ALL WORKS &copy; <script
+                    type="text/javascript">document.write(new Date().getFullYear())</script> <a target="_blank"
+                                                                                                href="//shivajivarma.com/?rel=author"
+                                                                                                rel="author">SHIVAJI VARMA</a></span>
     </div>
 </footer>
 
@@ -119,13 +128,21 @@
                         var hits = $(this).find('weight').attr('hits');
 
 
-                        var output = "<div class='result-div'><div class='result'> <a href='./open.page.php?urlID=" + urlID + "&&domainID=" + domainID + "&&redirect=" + redirect + "&&cat=" + cat + "'>" + title + "</a><div class='link'>" + url + "</div><div class='weight'>[Weight: " + weight + "] [Hits: " + hits + "]  [Page rank: " + PageRank + "]</div></div></div>"
+                        var output = "<div class='result-div row'>" +
+                                            "<div class='col-md-8'>" +
+                                                "<a href='./open.page.php?urlID=" + urlID + "&&domainID=" + domainID + "&&redirect=" + redirect + "&&cat=" + cat + "'>" + title + "</a>" +
+                                                "<div class='link'>" + url + "</div>" +
+                                            "</div>" +
+                                            "<div class='col-md-4'>" +
+                                                "<div class='weight'>[Weight: " + weight + "] [Hits: " + hits + "]  [Page rank: " + PageRank + "]</div>" +
+                                            "</div>" +
+                                        "</div>";
 
                         $container.append(output);
                     });
 
                     if (!( $(xml).find('specialResult').length + $(xml).find('result').length)) {
-                        $container.append("<div style='font-size:50px; text-align:center; margin-top:200px'>No results<div>");
+                        $container.append("<div class='no-result'>No results</div>");
                     }
 
                 }
@@ -140,10 +157,10 @@
                     suggestions.find('.words').html(JSON.stringify(json));
 
                     if (json) {
-                        if (json[1]) {
+                        if (json[1] && json[1].length) {
                             suggestions.find('.words').html('Suggestions : ');
                             var i = 0;
-                            for (i = 0; i < 5; i++) {
+                            for (i = 0; i < 5 && i < json[1].length; i++) {
                                 suggestions.find('.words').append('<a href="./?query=' + json[1][i] + '"><u>' + json[1][i] + '</u></a>  ');
                             }
                         } else {
