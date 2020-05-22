@@ -17,12 +17,13 @@ Project Documentation: http://shivajivarma.com/project/search-engine/
     git clone https://github.com/shivajivarma/search-engine.git
    ```
 
-3. Ensure below extensions as enabled in php.ini
-    * php_curl.dll
-    * php_mysqli.dll
+3. Ensure below extensions as enabled in `php.ini`. Just remove `;` before
+    * extension_dir = "ext"
+    * extension=php_curl.dll
+    * extension=php_mysqli.dll
     
 
-4. Create scheme with name 'search'
+4. Create schema with name 'search'
 
 5. Start the PHP server in project source folder.
 
